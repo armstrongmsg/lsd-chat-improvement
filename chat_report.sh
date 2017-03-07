@@ -15,6 +15,10 @@ rocket_chat_login () {
 	rocket_chat_api login "-d username=$1&password=$2"
 }
 
+echo -n "Password for user $username:"
+read -s password
+echo
+
 echo "----------------------------------------------"
 echo "Getting auth token"
 login_tokens=`rocket_chat_login $username $password`
