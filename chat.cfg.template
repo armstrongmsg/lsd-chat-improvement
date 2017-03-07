@@ -1,5 +1,15 @@
+# The username and password used to access the API
+# Highly recommended to use admin accounts
 username=
 password=
+
+# The host where the chat runs
+# Can be an IP address or a domain
+
 host=
+
+# The API port. Normally :3000
 port=
+
+# The interval between activity data collects
 collect_interval=
