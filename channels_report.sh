@@ -3,9 +3,8 @@
 auth_token=$1
 user_id=$2
 host="$3"
-port="$4"
 
-channels_list=`curl -s -S http://$host:$port/api/v1/channels.list -H "X-Auth-Token: $auth_token" -H "X-User-Id: $user_id" `
+channels_list=`curl -s -S https://$host/api/v1/channels.list -H "X-Auth-Token: $auth_token" -H "X-User-Id: $user_id" `
 number_of_channels=`echo $channels_list | jq -r '.count'`
 messages=0
 

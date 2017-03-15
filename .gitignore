@@ -1,3 +1,7 @@
 *.csv
 chat.cfg
 *.txt
+.Rproj.user
+*.Rproj
+.RData
+.Rhistory

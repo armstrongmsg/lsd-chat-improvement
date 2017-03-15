@@ -3,11 +3,10 @@
 auth_token=$1
 user_id=$2
 host="$3"
-port="$4"
 
 timestamp=`date +%s`
 
-users_list=`curl -s -S http://$host:$port/api/v1/users.list -H "X-Auth-Token: $auth_token" -H "X-User-Id: $user_id" `
+users_list=`curl -s -S https://$host/api/v1/users.list -H "X-Auth-Token: $auth_token" -H "X-User-Id: $user_id" `
 
 number_of_users=`echo $users_list | jq -r '.count'`
 number_of_online_users=0
