@@ -1,0 +1,64 @@
+---
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    social: menu
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dygraphs)
+library(quantmod)
+library(ggplot2)
+library(plotly)
+library(dplyr)
+library(plyr)
+
+users <- read.table("users_report.csv", sep=",")
+#wide_data <- reshape(data, timevar="V2", idvar=c("V1"), direction="wide")
+users$time <- (users$V1 - users$V1[1]) / 60
+users <- rename(users, Type = V2)
+
+groups <- read.table("groups_report.csv", sep=",")
+#wide_data <- reshape(data, timevar="V2", idvar=c("V1"), direction="wide")
+groups$time <- (groups$V1 - groups$V1[1]) / 60
+groups <- rename(groups, Type = V2)
+
+channels <- read.table("channels_report.csv", sep=",")
+#wide_data <- reshape(data, timevar="V2", idvar=c("V1"), direction="wide")
+channels$time <- (channels$V1 - channels$V1[1]) / 60
+channels <- rename(channels, Type = V2)
+```
+
+Column {.tabset}
+-------------------------------------
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+p <- ggplot(users, aes(x=time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10)))
+ggplotly(p)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+p <- ggplot(groups, aes(x=time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10)))
+ggplotly(p)
+```
+
+### Chart C
+
+```{r}
+p <- ggplot(channels, aes(x=time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10)))
+ggplotly(p)
+```
+
