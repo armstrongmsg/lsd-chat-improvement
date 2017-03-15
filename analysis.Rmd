@@ -15,7 +15,6 @@ library(quantmod)
 library(ggplot2)
 library(plotly)
 library(dplyr)
-library(plyr)
 
 users <- read.table("users_report.csv", sep=",")
 #wide_data <- reshape(data, timevar="V2", idvar=c("V1"), direction="wide")
@@ -40,8 +39,21 @@ Column {data-width=650}
 
 ### Chart A
 
+
+
 ```{r}
-p <- ggplot(users, aes(x=time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10)))
+get_date <- function(timestamp) {
+    return(as.POSIXct(timestamp, origin="1970-01-01"))
+}
+
+users$date <- as.vector(rapply(as.list(users$V1), get_date, how = "replace"))
+
+# dates in x-axis
+# base <- ggplot(users, aes(x = date, y = V3, color = Type)) 
+# base <- base + scale_x_date(date_labels = "%b %d")
+# base + geom_point()
+
+p <- ggplot(users, aes(x=time, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + scale_x_date(date_labels = "%b %d") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10)))
 ggplotly(p)
 ```
 
@@ -51,7 +63,7 @@ Column {data-width=350}
 ### Chart B
 
 ```{r}
-p <- ggplot(groups, aes(x=time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10)))
+p <- ggplot(groups, aes(x=time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10)))
 ggplotly(p)
 ```
 
