@@ -8,7 +8,7 @@ groups_report_file="groups_report.csv"
 source $conf_file
 
 rocket_chat_api () {
-	curl -s -S http://$host:$port/api/v1/$1 ${@:2}
+	curl -s -S https://$host/api/v1/$1 ${@:2}
 }
 
 rocket_chat_login () {
@@ -31,11 +31,11 @@ timestamp=`date +%s`
 while :
 do
 	echo "Generating channels report"
-	bash channels_report.sh $auth_token $user_id $host $port >> $channels_report_file
+	bash channels_report.sh $auth_token $user_id $host >> $channels_report_file
 	echo "Generating users report"
-	bash users_report.sh $auth_token $user_id $host $port >> $users_report_file
+	bash users_report.sh $auth_token $user_id $host >> $users_report_file
 	echo "Generating groups report"
-	bash groups_report.sh $auth_token $user_id $host $port >> $groups_report_file
+	bash groups_report.sh $auth_token $user_id $host >> $groups_report_file
 
 	echo "Waiting for collect time"
 	sleep $collect_interval

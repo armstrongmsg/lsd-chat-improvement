@@ -2,12 +2,9 @@
 # Highly recommended to use admin accounts
 username=
 
-# The host where the chat runs
-# Can be an IP address or a domain
+# The URL to access the Chat API
+# format -> IP:port
 host=
-
-# The API port. Normally :3000
-port=
 
 # The interval between activity data collects
 collect_interval=
