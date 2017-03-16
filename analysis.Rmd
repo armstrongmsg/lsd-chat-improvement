@@ -83,12 +83,21 @@ get_date <- function(timestamp) {
 }
 users_pre$date <- as.vector(rapply(as.list(users_pre$V1), get_date, how = "replace"))
 
-p <- ggplot(users_pre, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"))
+p <- ggplot(users_pre, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
+
+#Online users
+users_pre <- read.table("pre-campanha/users_report.csv", sep=",")
+users_pre <- rename(users_pre, Type = V2)
+users_pre <- filter(users_pre, Type == "online")
+users_pre$unformatted_time <- as.POSIXlt(as.numeric(as.character(users_pre$V1)),origin="1970-01-01")#,tz="GMT"
+
+ggplot(users_pre, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
+
+
 # dates in x-axis
 # base <- ggplot(users_pre, aes(x = date, y = V3, color = Type)) 
 # base <- base + scale_x_date(date_labels = "%b %d")
 # base + geom_point()
-
 p <- ggplot(users_pre, aes(x=date, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + scale_x_date(date_labels = "%b %d") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10)))
 ggplotly(p)
 ```
@@ -107,7 +116,7 @@ ggplotly(p)
 
 ```{r}
 #Size: 9.3 x 17
-p <- ggplot(channels_pre, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"))
+p <- ggplot(channels_pre, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
 ggplotly(p)
 
 #Removing diferentonas
@@ -116,7 +125,7 @@ channels_pre <- rename(channels_pre, Type = V2)
 channels_pre <- filter(channels_pre, Type != "diferentonas" & Type != "total")
 channels_pre$unformatted_time <- as.POSIXlt(as.numeric(as.character(channels_pre$V1)),origin="1970-01-01")#,tz="GMT"
 
-ggplot(channels_pre, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"))
+ggplot(channels_pre, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
 ```
 
 
@@ -131,8 +140,17 @@ Column {data-width=650}
 #library(plyr)
 users_post$date <- as.vector(rapply(as.list(users_post$V1), get_date, how = "replace"))
 
-p <- ggplot(users_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"))
+p <- ggplot(users_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
 ggplotly(p)
+
+#Online users
+users_post <- read.table("atuacao/users_report.csv", sep=",")
+users_post <- rename(users_post, Type = V2)
+users_post <- filter(users_post, Type == "online")
+users_post$unformatted_time <- as.POSIXlt(as.numeric(as.character(users_post$V1)),origin="1970-01-01")#,tz="GMT"
+
+ggplot(users_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=1) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Usuários") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
+
 ```
 
 Column {data-width=350}
@@ -141,23 +159,23 @@ Column {data-width=350}
 ### Chart E
 
 ```{r}
-p <- ggplot(groups_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"))
+p <- ggplot(groups_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=16), axis.title=element_text(size=16), legend.text = element_text(size=16), legend.title = element_text(size=16)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
 ggplotly(p)
 ```
 
 ### Chart F
 
 ```{r}
-p <- ggplot(channels_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"))
+p <- ggplot(channels_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
 ggplotly(p)
 
 #Removing diferentonas
 channels_post <- read.table("atuacao/channels_report.csv", sep=",")
 channels_post <- rename(channels_post, Type = V2)
-channels_post <- filter(channels_post, Type != "diferentonas" & Type != "total")
+channels_post <- filter(channels_post, Type == "LSD" | Type == "fogbow" | Type == "random")
 channels_post$unformatted_time <- as.POSIXlt(as.numeric(as.character(channels_post$V1)),origin="1970-01-01")#,tz="GMT"
 
-ggplot(channels_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"))
+ggplot(channels_post, aes(x=unformatted_time, y=V3, colour=Type)) + geom_point(size=3) + theme_bw() + xlab("Linha do tempo") + ylab("Quantidade de Mensagens") + theme(axis.text=element_text(size=28), axis.title=element_text(size=28), legend.text = element_text(size=28), legend.title = element_text(size=28)) + guides(colour = guide_legend(override.aes = list(size=10))) + scale_x_datetime(breaks = date_breaks("1 day"), minor_breaks = date_breaks("1 hour"),labels = date_format("%d/%m"))
 
 ```
 
